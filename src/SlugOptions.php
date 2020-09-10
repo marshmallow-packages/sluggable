@@ -81,6 +81,17 @@ class SlugOptions
         return $this;
     }
 
+    /**
+     * This method is deprecated. It doesnt generate a new
+     * slug on updates is now the default behauvior.
+     */
+    public function doNotGenerateSlugsOnUpdate(): self
+    {
+        $this->generateSlugsOnUpdate = false;
+
+        return $this;
+    }
+
     public function generateSlugsOnUpdate(): self
     {
         $this->generateSlugsOnUpdate = true;
