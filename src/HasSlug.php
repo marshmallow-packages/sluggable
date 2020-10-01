@@ -2,14 +2,23 @@
 
 namespace Marshmallow\Sluggable;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Marshmallow\Sluggable\SlugOptions;
+use Illuminate\Database\Eloquent\Model;
 
 trait HasSlug
 {
     protected SlugOptions $slugOptions;
 
-    abstract public function getSlugOptions(): SlugOptions;
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
+    }
 
     protected static function bootHasSlug()
     {
