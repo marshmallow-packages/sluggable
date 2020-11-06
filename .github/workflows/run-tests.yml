@@ -31,7 +31,9 @@ jobs:
         run: composer install --prefer-dist --no-interaction --no-suggest --no-ansi --no-progress
 
       - name: Create database
-        run: touch database/database.sqlite
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
 
       - name: Execute tests
         run: composer test
