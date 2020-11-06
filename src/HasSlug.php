@@ -7,16 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 
 trait HasSlug
 {
-    protected SlugOptions $slugOptions;
+    public SlugOptions $slugOptions;
 
     /**
      * Get the options for generating the slug.
      */
     public function getSlugOptions() : SlugOptions
     {
-        return SlugOptions::create()
-            ->generateSlugsFrom('name')
-            ->saveSlugsTo('slug');
+    	if (isset($this->slugOptions)) {
+    		return $this->slugOptions;
+    	}
+        return $this->getDefaultSlugOptions();
+    }
+
+    public function getDefaultSlugOptions() : SlugOptions
+    {
+    	return SlugOptions::create()
+	            ->generateSlugsFrom('name')
+	            ->saveSlugsTo('slug');
     }
 
     protected static function bootHasSlug()
@@ -33,7 +41,6 @@ trait HasSlug
     protected function generateSlugOnCreate()
     {
         $this->slugOptions = $this->getSlugOptions();
-
         if (! $this->slugOptions->generateSlugsOnCreate) {
             return;
         }
@@ -44,8 +51,7 @@ trait HasSlug
     protected function generateSlugOnUpdate()
     {
         $this->slugOptions = $this->getSlugOptions();
-
-        if (! $this->slugOptions->generateSlugsOnUpdate) {
+        if (!$this->slugOptions->generateSlugsOnUpdate && $this->{$this->slugOptions->slugField} !== null) {
             return;
         }
 
@@ -169,10 +175,6 @@ trait HasSlug
      */
     protected function generateSubstring($slugSourceString)
     {
-        if (function_exists('mb_substr')) {
-            return mb_substr($slugSourceString, 0, $this->slugOptions->maximumLength);
-        }
-
-        return substr($slugSourceString, 0, $this->slugOptions->maximumLength);
+    	return mb_substr($slugSourceString, 0, $this->slugOptions->maximumLength);
     }
 }

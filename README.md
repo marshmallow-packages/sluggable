@@ -223,66 +223,6 @@ $model->save(); //slug stays "my-name"
 
 If you want to explicitly update the slug on the model you can call `generateSlug()` on your model at any time to make the slug according to your other options. Don't forget to `save()` the model to persist the update to your database.
 
-### Integration with laravel-translatable
-
-You can use this package along with [laravel-translatable](https://github.com/spatie/laravel-translatable) to generate a slug for each locale. Instead of using the `HasSlug` trait, you must use the `HasTranslatableSlug` trait, and add the name of the slug field to the `$translatable` array. For slugs that are generated from a single field _or_ multiple fields, you don't have to change anything else.
-
-```php
-namespace App;
-
-use Marshmallow\Sluggable\HasTranslatableSlug;
-use Marshmallow\Sluggable\SlugOptions;
-use Spatie\Translatable\HasTranslations;
-use Illuminate\Database\Eloquent\Model;
-
-class YourEloquentModel extends Model
-{
-    use HasTranslations, HasTranslatableSlug;
-
-    public $translatable = ['name', 'slug'];
-
-    /**
-     * Get the options for generating the slug.
-     */
-    public function getSlugOptions() : SlugOptions
-    {
-        return SlugOptions::create()
-            ->generateSlugsFrom('name')
-            ->saveSlugsTo('slug');
-    }
-}
-```
-
-For slugs that are generated from a callable, you need to instantiate the `SlugOptions` with the `createWithLocales` method. The callable now takes two arguments instead of one. Both the `$model` and the `$locale` are available to generate a slug from.
-
-```php
-namespace App;
-
-use Marshmallow\Sluggable\HasTranslatableSlug;
-use Marshmallow\Sluggable\SlugOptions;
-use Spatie\Translatable\HasTranslations;
-use Illuminate\Database\Eloquent\Model;
-
-class YourEloquentModel extends Model
-{
-    use HasTranslations, HasTranslatableSlug;
-
-    public $translatable = ['name', 'slug'];
-
-    /**
-     * Get the options for generating the slug.
-     */
-    public function getSlugOptions() : SlugOptions
-    {
-        return SlugOptions::createWithLocales(['en', 'nl'])
-            ->generateSlugsFrom(function($model, $locale) {
-                return "{$locale} {$model->id}";
-            })
-            ->saveSlugsTo('slug');
-    }
-}
-```
-
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
