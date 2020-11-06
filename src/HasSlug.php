@@ -3,7 +3,6 @@
 namespace Marshmallow\Sluggable;
 
 use Illuminate\Support\Str;
-use Marshmallow\Sluggable\SlugOptions;
 use Illuminate\Database\Eloquent\Model;
 
 trait HasSlug
