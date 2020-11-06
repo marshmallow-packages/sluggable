@@ -10,8 +10,8 @@ use Marshmallow\Sluggable\Tests\Database\Factories\UserFactory;
 
 class User extends Model
 {
-	use HasSlug;
-	use HasFactory;
+    use HasSlug;
+    use HasFactory;
 
     public $timestamps = false;
 
@@ -31,21 +31,22 @@ class User extends Model
     public function setSlugOptions(SlugOptions $slugOptions): self
     {
         $this->slugOptions = $slugOptions;
+
         return $this;
     }
 
     protected static function newFactory()
-	{
-	    return UserFactory::new();
-	}
+    {
+        return UserFactory::new();
+    }
 
-	// public function getSlugOptions() : SlugOptions
+    // public function getSlugOptions() : SlugOptions
  //    {
  //    	$options = SlugOptions::create()
-	//             ->generateSlugsFrom('name')
-	//             ->saveSlugsTo('slug');
+    //             ->generateSlugsFrom('name')
+    //             ->saveSlugsTo('slug');
 
-	//     $options->generateSlugFrom = [];
-	//     return $options;
+    //     $options->generateSlugFrom = [];
+    //     return $options;
  //    }
 }

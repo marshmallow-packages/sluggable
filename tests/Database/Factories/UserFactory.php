@@ -2,7 +2,6 @@
 
 namespace Marshmallow\Sluggable\Tests\Database\Factories;
 
-use Illuminate\Support\Str;
 use Marshmallow\Sluggable\Tests\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

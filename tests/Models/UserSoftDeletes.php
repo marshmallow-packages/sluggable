@@ -6,12 +6,10 @@ use Marshmallow\Sluggable\HasSlug;
 use Marshmallow\Sluggable\SlugOptions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Marshmallow\Sluggable\Tests\Database\Factories\UserFactory;
 
 class UserSoftDeletes extends Model
 {
-	use SoftDeletes,
+    use SoftDeletes,
         HasSlug;
 
     protected $table = 'users';

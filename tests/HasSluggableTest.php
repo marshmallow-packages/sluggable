@@ -3,9 +3,7 @@
 namespace Marshmallow\Sluggable\Tests;
 
 use Illuminate\Support\Str;
-use Marshmallow\Sluggable\SlugOptions;
 use Marshmallow\Sluggable\InvalidOption;
-use Illuminate\Database\Eloquent\Builder;
 use Marshmallow\Sluggable\Tests\Models\User;
 use Marshmallow\Sluggable\Tests\Models\UserSoftDeletes;
 use Marshmallow\Sluggable\Tests\Models\UserWithoutFrom;
@@ -98,7 +96,7 @@ class HasSluggableTest extends TestCase
     {
         $model = new User;
         $model->setSlugOptions(
-        	$model->getSlugOptions()->generateSlugsFrom(['name', 'other_field'])
+            $model->getSlugOptions()->generateSlugsFrom(['name', 'other_field'])
         );
 
         $model->name = 'this is a test';
@@ -113,7 +111,7 @@ class HasSluggableTest extends TestCase
     {
         $model = new User;
         $model->setSlugOptions(
-        	$model->getSlugOptions()->generateSlugsFrom(function (User $model): string {
+            $model->getSlugOptions()->generateSlugsFrom(function (User $model): string {
                 return 'foo-'.Str::slug($model->name);
             })
         );
@@ -129,9 +127,9 @@ class HasSluggableTest extends TestCase
     {
         foreach (range(1, 10) as $i) {
             $model = new User;
-	        $model->setSlugOptions(
-	        	$model->getSlugOptions()->allowDuplicateSlugs()
-	        );
+            $model->setSlugOptions(
+                $model->getSlugOptions()->allowDuplicateSlugs()
+            );
 
             $model->name = 'this is a test';
             $model->save();
@@ -145,7 +143,7 @@ class HasSluggableTest extends TestCase
     {
         $model = new User;
         $model->setSlugOptions(
-        	$model->getSlugOptions()->slugsShouldBeNoLongerThan(5)
+            $model->getSlugOptions()->slugsShouldBeNoLongerThan(5)
         );
 
         $model->name = '123456789';
@@ -206,7 +204,7 @@ class HasSluggableTest extends TestCase
         $model = User::create(['name' => 'this is a test']);
         $otherModel = User::create(['name' => 'this is an other']);
         $model = $model->setSlugOptions(
-        	$model->getSlugOptions()->generateSlugsOnUpdate()
+            $model->getSlugOptions()->generateSlugsOnUpdate()
         );
         $model->slug = 'this-is-an-other';
         $model->save();
@@ -219,7 +217,7 @@ class HasSluggableTest extends TestCase
     {
         $model = new User;
         $model->setSlugOptions(
-        	$model->getSlugOptions()->doNotGenerateSlugsOnCreate()
+            $model->getSlugOptions()->doNotGenerateSlugsOnCreate()
         );
 
         $model->name = 'this is a test';
@@ -233,7 +231,7 @@ class HasSluggableTest extends TestCase
     {
         $model = new User;
         $model->setSlugOptions(
-        	$model->getSlugOptions()->doNotGenerateSlugsOnUpdate()
+            $model->getSlugOptions()->doNotGenerateSlugsOnUpdate()
         );
 
         $model->name = 'this is a test';
@@ -280,22 +278,22 @@ class HasSluggableTest extends TestCase
     /** @test */
     public function it_throwns_an_error_when_generate_slug_from_is_not_an_array()
     {
-    	$this->expectException(InvalidOption::class);
+        $this->expectException(InvalidOption::class);
 
-    	$model = new UserWithoutFrom;
+        $model = new UserWithoutFrom;
         $model->create([
-        	'name' => 'Stef'
+            'name' => 'Stef',
         ]);
     }
 
     /** @test */
     public function it_doesnt_allow_a_length_of_null()
     {
-    	$this->expectException(InvalidOption::class);
+        $this->expectException(InvalidOption::class);
 
-    	$model = new UserWithoutLength;
+        $model = new UserWithoutLength;
         $model->create([
-        	'name' => 'Stef'
+            'name' => 'Stef',
         ]);
     }
 }
