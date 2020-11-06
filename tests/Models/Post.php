@@ -10,8 +10,8 @@ use Marshmallow\Sluggable\Tests\Database\Factories\PostFactory;
 
 class Post extends Model
 {
-	use HasSlug;
-	use HasFactory;
+    use HasSlug;
+    use HasFactory;
 
     public $timestamps = false;
 
@@ -19,13 +19,13 @@ class Post extends Model
         'title', 'content', 'is_published',
     ];
 
-	public function getSlugOptions() : SlugOptions
+    public function getSlugOptions() : SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom(config('sluggable.slug_from'))
             ->saveSlugsTo(config('sluggable.slug_to'))
             ->slugsShouldBeNoLongerThan(
-            	(config('sluggable.length')) ? config('sluggable.length') : 255
+                (config('sluggable.length')) ? config('sluggable.length') : 255
             );
     }
 
@@ -38,7 +38,7 @@ class Post extends Model
     }
 
     protected static function newFactory()
-	{
-	    return PostFactory::new();
-	}
+    {
+        return PostFactory::new();
+    }
 }

@@ -14,17 +14,18 @@ trait HasSlug
      */
     public function getSlugOptions() : SlugOptions
     {
-    	if (isset($this->slugOptions)) {
-    		return $this->slugOptions;
-    	}
+        if (isset($this->slugOptions)) {
+            return $this->slugOptions;
+        }
+
         return $this->getDefaultSlugOptions();
     }
 
     public function getDefaultSlugOptions() : SlugOptions
     {
-    	return SlugOptions::create()
-	            ->generateSlugsFrom('name')
-	            ->saveSlugsTo('slug');
+        return SlugOptions::create()
+                ->generateSlugsFrom('name')
+                ->saveSlugsTo('slug');
     }
 
     protected static function bootHasSlug()
@@ -51,7 +52,7 @@ trait HasSlug
     protected function generateSlugOnUpdate()
     {
         $this->slugOptions = $this->getSlugOptions();
-        if (!$this->slugOptions->generateSlugsOnUpdate && $this->{$this->slugOptions->slugField} !== null) {
+        if (! $this->slugOptions->generateSlugsOnUpdate && $this->{$this->slugOptions->slugField} !== null) {
             return;
         }
 
@@ -175,6 +176,6 @@ trait HasSlug
      */
     protected function generateSubstring($slugSourceString)
     {
-    	return mb_substr($slugSourceString, 0, $this->slugOptions->maximumLength);
+        return mb_substr($slugSourceString, 0, $this->slugOptions->maximumLength);
     }
 }
