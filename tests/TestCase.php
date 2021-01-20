@@ -55,8 +55,8 @@ abstract class TestCase extends Orchestra
         $app['db']->connection()->getSchemaBuilder()->create('posts', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id')->nullable()->default(null);
-            $table->string('name');
-            $table->string('slug');
+            $table->string('name')->nullable()->default(null);
+            $table->string('slug')->nullable()->default(null);
             $table->string('other_field')->nullable()->default(null);
         });
     }

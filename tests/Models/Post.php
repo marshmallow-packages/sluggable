@@ -10,11 +10,9 @@ class Post extends Model
 {
     use HasSlug;
 
-    public $timestamps = false;
+    protected $guarded = [];
 
-    protected $fillable = [
-        'title', 'content', 'is_published',
-    ];
+    public $timestamps = false;
 
     public function getSlugOptions() : SlugOptions
     {
