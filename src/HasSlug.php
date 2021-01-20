@@ -4,10 +4,38 @@ namespace Marshmallow\Sluggable;
 
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Redirect;
+use Marshmallow\Redirectable\Facades\Redirector;
+use Marshmallow\Sluggable\Events\SlugWasCreated;
+use Marshmallow\Sluggable\Events\SlugWasDeleted;
+use Marshmallow\Sluggable\Events\SlugHasBeenChanged;
 
 trait HasSlug
 {
     public SlugOptions $slugOptions;
+
+    /**
+     * Return an array of artisan commands that
+     * need to be run to make sure slug information
+     * is available. By default we run route:clear and route:cache
+     * if the routes are cached.
+     */
+    public function getArtisanCommands(): array
+    {
+        return [
+            'route:cache',
+        ];
+    }
+
+    /**
+     * We run the artisan command of this method results in
+     * a true. This is added so we only run route:cache if the
+     * routes are in fact cached.
+     */
+    public function runArtisanCommandsWhen(): bool
+    {
+        return app()->routesAreCached();
+    }
 
     /**
      * Get the options for generating the slug.
@@ -36,6 +64,41 @@ trait HasSlug
 
         static::updating(function (Model $model) {
             $model->generateSlugOnUpdate();
+        });
+
+        static::created(function (Model $model) {
+            event(new SlugWasCreated($model));
+        });
+
+        static::updated(function (Model $model) {
+            $slugField = $model->slugOptions->slugField;
+            if ($model->isDirty($slugField)) {
+
+                /**
+                 * Add a record to the redirector
+                 */
+                if (method_exists($model, 'redirectable')) {
+                    $model = Redirector::add($model, $model->original[$slugField], $model->{$slugField});
+                }
+
+                /**
+                 * Trigger event so we can recache the routes.
+                 */
+                event(new SlugHasBeenChanged($model));
+            }
+        });
+        static::deleted(function (Model $model) {
+            /**
+             * Delete all items from the redirector.
+             */
+            if (method_exists($model, 'redirectable')) {
+                $model->redirectable()->delete();
+            }
+
+            /**
+             * Trigger event so we can recache the routes.
+             */
+            event(new SlugWasDeleted($model));
         });
     }
 
