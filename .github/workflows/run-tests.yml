@@ -44,5 +44,4 @@ jobs:
           DB_USER: root
           DB_PASSWORD: db_test
         run: |
-          php artisan migrate
           composer test
