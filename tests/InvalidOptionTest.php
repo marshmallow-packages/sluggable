@@ -11,23 +11,13 @@ use Marshmallow\Sluggable\Tests\Models\Post;
  */
 class InvalidOptionTest extends TestCase
 {
-    /**
-     * Setup the test environment.
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
     /** @test */
     public function it_work_when_setting_from_variables()
     {
         Config::set('sluggable.slug_from', 'name');
         Config::set('sluggable.slug_to', 'slug');
 
-        Post::factory()->create([
-            'name' => 'Stef',
-        ]);
+        Post::create(['name' => 'Stef']);
         $this->assertEquals('stef', Post::first()->slug);
     }
 
@@ -38,7 +28,7 @@ class InvalidOptionTest extends TestCase
         Config::set('sluggable.slug_to', '');
 
         $this->expectException(InvalidOption::class);
-        Post::factory()->create();
+        Post::create(['name' => 'this is a test']);
     }
 
     /** @test */

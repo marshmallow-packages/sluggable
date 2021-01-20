@@ -9,14 +9,6 @@ use Marshmallow\Sluggable\SlugOptions;
  */
 class SlugOptionsTest extends TestCase
 {
-    /**
-     * Setup the test environment.
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
     /** @test */
     public function it_has_a_high_dash_as_default_separator()
     {

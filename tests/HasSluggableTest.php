@@ -5,23 +5,13 @@ namespace Marshmallow\Sluggable\Tests;
 use Illuminate\Support\Str;
 use Marshmallow\Sluggable\InvalidOption;
 use Marshmallow\Sluggable\Tests\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Marshmallow\Sluggable\Tests\Models\UserSoftDeletes;
 use Marshmallow\Sluggable\Tests\Models\UserWithoutFrom;
 use Marshmallow\Sluggable\Tests\Models\UserWithoutLength;
 
-/**
- * @property EloquentBuilder eloquentBuilder
- */
 class HasSluggableTest extends TestCase
 {
-    /**
-     * Setup the test environment.
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
     /** @test */
     public function it_will_save_a_slug_when_saving_a_model()
     {
@@ -202,7 +192,7 @@ class HasSluggableTest extends TestCase
     public function it_can_handle_duplicates_when_overwriting_a_slug()
     {
         $model = User::create(['name' => 'this is a test']);
-        $otherModel = User::create(['name' => 'this is an other']);
+        User::create(['name' => 'this is an other']);
         $model = $model->setSlugOptions(
             $model->getSlugOptions()->generateSlugsOnUpdate()
         );
