@@ -59,7 +59,7 @@ jobs:
         with:
           timeout_minutes: 5
           max_attempts: 5
-          command: composer update --${{ matrix.dependency-version }} --no-interaction --no-progress --prefer-dist -o -n --ignore-platform-reqs
+          command: composer update --no-interaction --no-progress --prefer-dist -o -n --ignore-platform-reqs
 
       - name: Execute tests
         run: vendor/bin/phpunit
