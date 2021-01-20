@@ -11,14 +11,6 @@ use Marshmallow\Sluggable\Tests\Models\Post;
  */
 class InvalidOptionTest extends TestCase
 {
-    /**
-     * Setup the test environment.
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
     /** @test */
     public function it_work_when_setting_from_variables()
     {

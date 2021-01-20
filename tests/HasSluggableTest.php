@@ -12,16 +12,6 @@ use Marshmallow\Sluggable\Tests\Models\UserWithoutLength;
 
 class HasSluggableTest extends TestCase
 {
-    use RefreshDatabase;
-
-    /**
-     * Setup the test environment.
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
     /** @test */
     public function it_will_save_a_slug_when_saving_a_model()
     {
