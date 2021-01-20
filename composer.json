@@ -39,6 +39,13 @@
     "scripts": {
 	    "test": "vendor/bin/phpunit --coverage-text"
 	},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Marshmallow\\Sluggable\\SluggableServiceProvider"
+            ]
+        }
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require-dev": {
