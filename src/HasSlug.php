@@ -112,9 +112,13 @@ trait HasSlug
         $this->addSlug();
     }
 
+    /**
+     * Check if the slug field is dirty and not empty
+     */
     protected function slugFieldIsDirty()
     {
-        return $this->isDirty($this->slugOptions->slugField);
+        $slugField = $this->slugOptions->slugField;
+        return $this->isDirty($slugField) && $this->{$slugField};
     }
 
     protected function slugFieldIsClean()
