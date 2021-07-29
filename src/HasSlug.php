@@ -9,6 +9,7 @@ use Marshmallow\Redirectable\Facades\Redirector;
 use Marshmallow\Sluggable\Events\SlugWasCreated;
 use Marshmallow\Sluggable\Events\SlugWasDeleted;
 use Marshmallow\Sluggable\Events\SlugHasBeenChanged;
+use Marshmallow\Sluggable\Contracts\TranslatableSlug;
 
 trait HasSlug
 {
@@ -35,6 +36,18 @@ trait HasSlug
     public function runArtisanCommandsWhen(): bool
     {
         return app()->routesAreCached();
+    }
+
+    public function getAndParseSlugOptions(): SlugOptions
+    {
+        $options = $this->getSlugOptions();
+        if ($this instanceof TranslatableSlug) {
+            if (!$options->usingLanguageIsset()) {
+                $options->usingLanguage(request()->getTranslatableLocale());
+            }
+        }
+
+        return $options;
     }
 
     /**
@@ -104,7 +117,7 @@ trait HasSlug
 
     protected function generateSlugOnCreate()
     {
-        $this->slugOptions = $this->getSlugOptions();
+        $this->slugOptions = $this->getAndParseSlugOptions();
         if (!$this->slugOptions->generateSlugsOnCreate) {
             return;
         }
@@ -128,7 +141,7 @@ trait HasSlug
 
     protected function generateSlugOnUpdate()
     {
-        $this->slugOptions = $this->getSlugOptions();
+        $this->slugOptions = $this->getAndParseSlugOptions();
         if (!$this->slugOptions->generateSlugsOnUpdate && $this->{$this->slugOptions->slugField} !== null && $this->slugFieldIsClean()) {
             return;
         }
@@ -138,7 +151,7 @@ trait HasSlug
 
     public function generateSlug()
     {
-        $this->slugOptions = $this->getSlugOptions();
+        $this->slugOptions = $this->getAndParseSlugOptions();
 
         $this->addSlug();
     }
