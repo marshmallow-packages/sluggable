@@ -19,6 +19,8 @@ class SlugOptions
 
     public string $slugSeparator = '-';
 
+    public bool $slugLanguageSet = false;
+
     public string $slugLanguage = 'en';
 
     public array $translatableLocales = [];
@@ -109,7 +111,13 @@ class SlugOptions
     public function usingLanguage(string $language): self
     {
         $this->slugLanguage = $language;
+        $this->slugLanguageSet = true;
 
         return $this;
+    }
+
+    public function usingLanguageIsset(): bool
+    {
+        return $this->slugLanguageSet;
     }
 }
