@@ -22,9 +22,9 @@
         }
     ],
     "require": {
-        "php": "^7.4|^8.0",
-        "illuminate/database": "^7.0|^8.0",
-        "illuminate/support": "^7.0.5|^8.0"
+        "php": "^7.4|^8.0|^8.1",
+        "illuminate/database": "^7.0|^8.0|^9.0",
+        "illuminate/support": "^7.0.5|^8.0|^9.0"
     },
     "autoload": {
         "psr-4": {
@@ -32,13 +32,13 @@
         }
     },
     "autoload-dev": {
-	    "psr-4": {
-	     	"Marshmallow\\Sluggable\\Tests\\": "tests"
-	    }
-	 },
+        "psr-4": {
+            "Marshmallow\\Sluggable\\Tests\\": "tests"
+        }
+    },
     "scripts": {
-	    "test": "vendor/bin/phpunit --coverage-text"
-	},
+        "test": "vendor/bin/phpunit --coverage-text"
+    },
     "extra": {
         "laravel": {
             "providers": [
