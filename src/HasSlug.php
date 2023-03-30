@@ -142,7 +142,11 @@ trait HasSlug
     protected function generateSlugOnUpdate()
     {
         $this->slugOptions = $this->getAndParseSlugOptions();
-        if (!$this->slugOptions->generateSlugsOnUpdate && $this->{$this->slugOptions->slugField} !== null && $this->slugFieldIsClean()) {
+        if (!$this->slugOptions->generateSlugsOnUpdate && $this->{$this->slugOptions->slugField} !== null) {
+            return;
+        }
+
+        if ($this->slugFieldIsClean()) {
             return;
         }
 
