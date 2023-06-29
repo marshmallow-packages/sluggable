@@ -3,9 +3,8 @@
 namespace Marshmallow\Sluggable\Listeners;
 
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class RunArtisanCommands implements ShouldQueue
+class RunArtisanCommands
 {
     public function handle($event)
     {
@@ -16,9 +15,13 @@ class RunArtisanCommands implements ShouldQueue
 
     protected function runArtisanCommands($event)
     {
-        $commands = $event->model->getArtisanCommands();
-        foreach ($commands as $command) {
-            Artisan::call($command);
+        if (method_exists($event->model, 'runSluggableArtisanCommands')) {
+            $event->model->runSluggableArtisanCommands();
+        } else {
+            $commands = $event->model->getArtisanCommands();
+            foreach ($commands as $command) {
+                Artisan::call($command);
+            }
         }
     }
 }
