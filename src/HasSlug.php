@@ -2,6 +2,8 @@
 
 namespace Marshmallow\Sluggable;
 
+use ReflectionMethod;
+use ReflectionParameter;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Redirect;
@@ -10,6 +12,7 @@ use Marshmallow\Sluggable\Events\SlugWasCreated;
 use Marshmallow\Sluggable\Events\SlugWasDeleted;
 use Marshmallow\Sluggable\Events\SlugHasBeenChanged;
 use Marshmallow\Sluggable\Contracts\TranslatableSlug;
+use Illuminate\Database\UniqueConstraintViolationException;
 
 trait HasSlug
 {
@@ -91,7 +94,35 @@ trait HasSlug
                  * Add a record to the redirector
                  */
                 if (method_exists($model, 'redirectable')) {
-                    $model = Redirector::add($model, $model->original[$slugField], $model->{$slugField});
+
+                    $redirect_this = $model->original[$slugField];
+                    $to_this = $model->{$slugField};
+
+                    if (method_exists($model, 'route')) {
+                        $method = new \ReflectionMethod(get_class($model), 'route');
+                        $parameters = $method->getParameters();
+                        $slug_parameter_exists = collect($parameters)
+                            ->filter(function (ReflectionParameter $parameter) {
+                                return $parameter->name === 'slug';
+                            })->count() === 1;
+
+                        if ($slug_parameter_exists) {
+                            $redirect_this = $model->route(slug: $redirect_this);
+                            $to_this = $model->route();
+
+                            $redirect_this = Str::of($redirect_this)->remove(config('app.url') . '/');
+                            $to_this = Str::of($to_this)->remove(config('app.url') . '/');
+                        }
+                    }
+
+                    try {
+                        $model = Redirector::add(
+                            $model,
+                            redirect_this: $redirect_this,
+                            to_this: $to_this,
+                        );
+                    } catch (\Illuminate\Database\UniqueConstraintViolationException) {
+                    }
                 }
 
                 /**
