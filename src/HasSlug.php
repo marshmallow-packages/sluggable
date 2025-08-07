@@ -107,7 +107,7 @@ trait HasSlug
                             })->count() === 1;
 
                         if ($slug_parameter_exists) {
-                            $redirect_this = $model->route(slug: $redirect_this);
+                            $redirect_this = $model->route($redirect_this);
                             $to_this = $model->route();
 
                             $redirect_this = Str::of($redirect_this)->remove(config('app.url') . '/');
