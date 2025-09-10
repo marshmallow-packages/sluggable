@@ -5,6 +5,7 @@ namespace Marshmallow\Sluggable;
 use ReflectionMethod;
 use ReflectionParameter;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Redirect;
 use Marshmallow\Redirectable\Facades\Redirector;
@@ -27,6 +28,7 @@ trait HasSlug
     public function getArtisanCommands(): array
     {
         return [
+            'route:clear',
             'route:cache',
         ];
     }
@@ -83,7 +85,9 @@ trait HasSlug
         });
 
         static::created(function (Model $model) {
-            event(new SlugWasCreated($model));
+            DB::afterCommit(function () use ($model) {
+                event(new SlugWasCreated($model));
+            });
         });
 
         static::updated(function (Model $model) {
@@ -128,7 +132,9 @@ trait HasSlug
                 /**
                  * Trigger event so we can recache the routes.
                  */
-                event(new SlugHasBeenChanged($model));
+                DB::afterCommit(function () use ($model) {
+                    event(new SlugHasBeenChanged($model));
+                });
             }
         });
         static::deleted(function (Model $model) {
@@ -142,7 +148,9 @@ trait HasSlug
             /**
              * Trigger event so we can recache the routes.
              */
-            event(new SlugWasDeleted($model));
+            DB::afterCommit(function () use ($model) {
+                event(new SlugWasDeleted($model));
+            });
         });
     }
 
